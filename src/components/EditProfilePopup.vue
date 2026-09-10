@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { usePopupsStore } from '@/stores/popups.js';
 import { useDataStore } from '@/stores/userData.js';
+import FloatInput from './FloatInput.vue';
 
 defineProps({
 
@@ -13,20 +14,42 @@ const formStore = useDataStore();
 const localForm = ref({
     id: formStore.id,
     name: '',
-    email: '',
+    about: '',
 })
 
+const inputName = reactive({
+    inputId: 'fio',
+    labelText: 'Имя',
+    textError: '',
+    autocomplete: 'name',
+    name: 'fio'
+});
+
+const inputAbout = reactive({
+    inputId: 'about',
+    labelText: 'О себе',
+    textError: '',
+    autocomplete: true,
+    name: 'about'
+});
+
+// следуим за изменением поля
+watch(() => localForm.value.name, () => { inputName.textError = ''; });
+watch(() => localForm.value.about, () => { inputAbout.textError = ''; });
+
+function validate() {
+    inputName.textError = localForm.value.name.trim() === '' ? 'Введите имя' : '';
+    inputAbout.textError = localForm.value.about.trim() === '' ? 'Заполните поле' : '';
+
+    return !inputName.textError && !inputAbout.textError;
+}
+
 function saveData() {
-
-    if (localForm.value.name === '') {
-
-    }
+    if (!validate()) return;
 
     formStore.saveForm({ ...localForm.value });
     popupsStore.closePopupEditProfile();
 }
-
-
 </script>
 
 <template>
@@ -36,19 +59,13 @@ function saveData() {
             <div class="popup__content">
                 <h2 class="popup__title">Редактировать профиль</h2>
                 <form class="form">
-                    <div class="form__section">
-                        <label htmlFor="name" class="form__label"></label>
-                        <input class="form__item form__item_type_name" v-model="localForm.name" id="name" name="name"
-                            placeholder="Имя" type="text" />
-                        <span class="form__input-error" id="name-error"></span>
-                    </div>
-                    <div class="form__section">
-                        <label htmlFor="about" class="form__label"></label>
-                        <input class="form__item form__item_type_about" v-model="localForm.about" id="about"
-                            name="about" placeholder="О себе" type="text" />
-                        <span class="form__input-error" id="about-error"></span>
-                    </div>
 
+                    <FloatInput v-model="localForm.name" :errorText="inputName.textError" :inputId="inputName.inputId"
+                        :labelText="inputName.labelText" :autocomplete="inputName.autocomplete"
+                        :name="inputName.name" />
+                    <FloatInput v-model="localForm.about" :errorText="inputAbout.textError" :inputId="inputAbout.inputId"
+                        :labelText="inputAbout.labelText" :autocomplete="inputAbout.autocomplete"
+                        :name="inputAbout.name" />
                     <button class="form__save" @click.prevent="saveData()" type="submit">Сохранить</button>
                 </form>
             </div>
