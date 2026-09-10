@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 'https://github.com/VeronaDracula/mesto-vue.git', 
+  base: '/mesto-vue/', 
   plugins: [
     vue(),
     vueDevTools(),

@@ -5,14 +5,14 @@ export const useGalleryStore = defineStore('gallery', {
         cards: [
             {
                 id: 1,
-                link: 'src/assets/images/owl5.jpg',
-                title: "Название",
+                link: 'https://bipbap.ru/wp-content/uploads/2017/06/1366818022_krasivye-mesta-3.jpg',
+                title: "Водопад",
                 likes: [1, 2]
             },
             {
                 id: 2,
-                link: 'src/assets/images/owl3.jpg',
-                title: "Сова",
+                link: 'https://previews.123rf.com/images/kotenko/kotenko1304/kotenko130400145/18909195-sunny-landscape-with-flowers-in-a-field.jpg',
+                title: "Поле",
                 likes: [2]
             }
         ],
